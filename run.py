@@ -104,30 +104,36 @@ print('Looking through',len(imgs),'images...')
 i = 0
 bad_count = 0
 
+img_offset = [270,150]
+
 ind = [int(random.random()*len(imgs)) for _ in range(100)]
 print(ind)
 # imgs = np.array(imgs)
+rightmost = 0
 for img in imgs:
     # if img != '3_2_77.jpg': continue
     print('Image #'+str(i),'-->',imgs[i])
     i+=1
     # print(img)
     roi = cv2.imread('./imgs/'+img)
-    # cv2.imshow('roi',roi)
     roi = cv2.cvtColor(roi,cv2.COLOR_BGR2GRAY)
+    roi = roi[0:100,0:250]
+    # cv2.imshow('roi',roi)
     eye,_ = find_eye(roi,find_pupil=False, scale_sizes=(85,116,15))
     # print(eye['maxmatch'])
     if eye['maxmatch'] > 0.87:
         # cv2.imshow(img,eye['img'])
         # print('img'+str(i%50),eye['top_left'])
-        cv2.imwrite('./stable2/'+img.split('.')[0]+'_'+str(eye['top_left'])+'.jpg', eye['img'])
+        rightmost = max(rightmost, eye['top_left'][0])
+        tl = [eye['top_left'][0] + img_offset[0], eye['top_left'][1] + img_offset[1]]
+        cv2.imwrite('./train/'+img.split('.')[0]+'_'+str(tl)+'.jpg', eye['img'])
     else:
         bad_count+=1
         print(bad_count)
         # input()
     # cv2.waitKey(0)
 
-
+print('rightmost:',rightmost)
 print('bad coutn:',bad_count)
 # cv2.destroyAllWindows()
 

@@ -13,15 +13,15 @@ GRID_SIZE = 4
 SAVE = False
 direction = 1
 
-cur = 3
+cur = 0
 counter = 0
 row = 0
-col = 3
+col = 0
 
 while True:
     _,frame = cam.read()
     frame = cv2.flip(frame,1)
-    roi = frame[80:400,200:648]
+    roi = frame[150:250,270:578]
     roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
     cv2.imshow('roi',roi)
     # cv2.imshow('frame',frame)
